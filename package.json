@@ -1,9 +1,9 @@
 {
-  "name": "widgets",
+  "name": "pixi-grid",
   "version": "0.0.1",
-  "description": "Builtin widgets",
+  "description": "A Pixi Grid Element",
   "author": "Firebox Technology",
-  "elements": {
-    "pixi-grid": "element/pixi-grid.html"
+  "widgets": {
+    "pixi-grid": "widget/pixi-grid.html"
   }
 }
