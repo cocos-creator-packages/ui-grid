@@ -14,8 +14,14 @@ function _interpolate(a, b) {
 // pixi config
 PIXI.utils._saidHello = true;
 
-window['widgets.pixi-grid'] = Polymer({
+Editor.registerWidget( 'pixi-grid', {
     is: 'pixi-grid',
+
+    behaviors: [EditorUI.focusable],
+
+    listeners: {
+        'mousedown': '_onMouseDown',
+    },
 
     properties: {
         debugInfo: {
@@ -74,6 +80,8 @@ window['widgets.pixi-grid'] = Polymer({
     },
 
     ready: function () {
+        this._initFocusable(this);
+
         var rect = this.$.view.getBoundingClientRect();
         this.renderer = new PIXI.WebGLRenderer( rect.width, rect.height, {
             view: this.$.canvas,
@@ -81,11 +89,25 @@ window['widgets.pixi-grid'] = Polymer({
         });
 
         this.stage = new PIXI.Container();
+
+        // background
         var background = new PIXI.Container();
         this.stage.addChild(background);
 
-        this.graphics = new PIXI.Graphics();
-        background.addChild(this.graphics);
+        this.bgGraphics = new PIXI.Graphics();
+        background.addChild(this.bgGraphics);
+
+        // DISABLE
+        // // scene
+        // this.scene = new PIXI.Container();
+        // this.stage.addChild(this.scene);
+
+        // // foreground
+        // var foreground = new PIXI.Container();
+        // this.stage.addChild(foreground);
+
+        // this.fgGraphics = new PIXI.Graphics();
+        // foreground.addChild(this.fgGraphics);
     },
 
     attached: function () {
@@ -97,6 +119,10 @@ window['widgets.pixi-grid'] = Polymer({
     lightDomReady: function() {
         this.resize();
         this.repaint();
+    },
+
+    _onMouseDown: function ( event ) {
+        this.setFocus();
     },
 
     // default 0.5, 0.5
@@ -401,52 +427,45 @@ window['widgets.pixi-grid'] = Polymer({
 
     panAction: function ( event ) {
         if ( event.which === 1 ) {
-            event.stopPropagation();
-
-            var mousemoveHandle = function(event) {
-                event.stopPropagation();
-
-                var dx = event.clientX - this._lastClientX;
-                var dy = event.clientY - this._lastClientY;
-
-                this._lastClientX = event.clientX;
-                this._lastClientY = event.clientY;
-
-                this.pan( dx, dy );
-                this.repaint();
-            }.bind(this);
-
-            var mouseupHandle = function(event) {
-                event.stopPropagation();
-
-                document.removeEventListener('mousemove', mousemoveHandle);
-                document.removeEventListener('mouseup', mouseupHandle);
-
-                EditorUI.removeDragGhost();
-                this.style.cursor = '';
-            }.bind(this);
-
-            //
-            this._lastClientX = event.clientX;
-            this._lastClientY = event.clientY;
-
-            //
-            EditorUI.addDragGhost('-webkit-grabbing');
             this.style.cursor = '-webkit-grabbing';
-            document.addEventListener ( 'mousemove', mousemoveHandle );
-            document.addEventListener ( 'mouseup', mouseupHandle );
+            EditorUI.startDrag('-webkit-grab', event,
+                                   // move
+                                   function ( event, dx, dy, offsetx, offsety ) {
+                                       this.pan( dx, dy );
+                                       this.repaint();
+                                   }.bind(this),
 
+                                   // end
+                                   function ( event, dx, dy, offsetx, offsety ) {
+                                       this.style.cursor = '';
+                                   }.bind(this));
             return;
         }
     },
+
+    // DISABLE
+    // updateSelectRect: function ( x, y, w, h ) {
+    //     var lineColor = 0x09fff;
+
+    //     this.fgGraphics.clear();
+    //     this.fgGraphics.beginFill(lineColor, 0.2);
+    //         this.fgGraphics.lineStyle(1, lineColor, 1.0);
+    //         this.fgGraphics.drawRect(x,y,w,h);
+    //     this.fgGraphics.endFill();
+    // },
+
+    // clearSelectRect: function () {
+    //     this.fgGraphics.clear();
+    //     this.fgGraphics.endFill();
+    // },
 
     _updateGrids: function () {
         var lineColor = 0x555555;
         var i, j, ticks, ratio;
         var screen_x, screen_y;
 
-        this.graphics.clear();
-        this.graphics.beginFill(lineColor);
+        this.bgGraphics.clear();
+        this.bgGraphics.beginFill(lineColor);
 
         // draw h ticks
         if ( this.hticks ) {
@@ -457,12 +476,12 @@ window['widgets.pixi-grid'] = Polymer({
             for ( i = this.hticks.minTickLevel; i <= this.hticks.maxTickLevel; ++i ) {
                 ratio = this.hticks.tickRatios[i];
                 if ( ratio > 0 ) {
-                    this.graphics.lineStyle(1, lineColor, ratio * 0.5);
+                    this.bgGraphics.lineStyle(1, lineColor, ratio * 0.5);
                     ticks = this.hticks.ticksAtLevel(i,true);
                     for ( j = 0; j < ticks.length; ++j ) {
                         screen_x = this.valueToPixelH(ticks[j]);
-                        this.graphics.moveTo( _snapPixel(screen_x), -1.0 );
-                        this.graphics.lineTo( _snapPixel(screen_x), this.canvasHeight );
+                        this.bgGraphics.moveTo( _snapPixel(screen_x), -1.0 );
+                        this.bgGraphics.lineTo( _snapPixel(screen_x), this.canvasHeight );
                     }
                 }
             }
@@ -477,18 +496,18 @@ window['widgets.pixi-grid'] = Polymer({
             for ( i = this.vticks.minTickLevel; i <= this.vticks.maxTickLevel; ++i ) {
                 ratio = this.vticks.tickRatios[i];
                 if ( ratio > 0 ) {
-                    this.graphics.lineStyle(1, lineColor, ratio * 0.5);
+                    this.bgGraphics.lineStyle(1, lineColor, ratio * 0.5);
                     ticks = this.vticks.ticksAtLevel(i,true);
                     for ( j = 0; j < ticks.length; ++j ) {
                         screen_y = this.valueToPixelV( ticks[j] );
-                        this.graphics.moveTo( 0.0, _snapPixel(screen_y) );
-                        this.graphics.lineTo( this.canvasWidth, _snapPixel(screen_y) );
+                        this.bgGraphics.moveTo( 0.0, _snapPixel(screen_y) );
+                        this.bgGraphics.lineTo( this.canvasWidth, _snapPixel(screen_y) );
                     }
                 }
             }
         }
 
-        this.graphics.endFill();
+        this.bgGraphics.endFill();
 
         // draw label
         if ( this.showLabelH || this.showLabelV ) {
