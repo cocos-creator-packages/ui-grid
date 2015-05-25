@@ -6,38 +6,54 @@ A grid scale widget renderred by pixi graphics.
 
 ## API
 
-## Method: setAnchor(x,y)
+### Method: setAnchor(x,y)
 
-## Method: setScaleH( lods, minScale, maxScale, type )
+ - `x` number - Range of [0.0,1.0]
+ - `y` number - Range of [0.0,1.0]
 
-## Method: setMappingH( minValue, maxValue, pixelRange )
+Sets a scale anchor.
 
-## Method: setRangeH( minValue, maxValue )
+### Method: setScaleH( lods, minScale, maxScale[, type] )
 
-## Method: setScaleV( lods, minScale, maxScale, type )
+ - `lods` array
+ - `minScale` number
+ - `maxScale` number
+ - `type` string - can be `frame`
 
-## Method: setMappingV( minValue, maxValue, pixelRange )
+Sets the scale method for horizontal scalar. Example:
 
-## Method: setRangeV( minValue, maxValue )
+```
+this.setScaleH( [5,2], 0.001, 1000 );
+```
 
-## Method: pan( deltaPixelX, deltaPixelY )
+### Method: setMappingH( minValue, maxValue, pixelRange )
 
-## Method: panX( deltaPixelX )
+### Method: setRangeH( minValue, maxValue )
 
-## Method: panY( deltaPixelX )
+### Method: setScaleV( lods, minScale, maxScale, type )
 
-## Method: xAxisScaleAt( pixelX, scale )
+### Method: setMappingV( minValue, maxValue, pixelRange )
 
-## Method: yAxisScaleAt( pixelY, scale )
+### Method: setRangeV( minValue, maxValue )
 
-## Method: xAxisSync( x, scaleX )
+### Method: pan( deltaPixelX, deltaPixelY )
 
-## Method: yAxisSync( y, scaleY )
+### Method: panX( deltaPixelX )
 
-## Method: resize( w, h )
+### Method: panY( deltaPixelX )
 
-## Method: repaint()
+### Method: xAxisScaleAt( pixelX, scale )
 
-## Method: scaleAction(event)
+### Method: yAxisScaleAt( pixelY, scale )
 
-## Method: panAction(event)
+### Method: xAxisSync( x, scaleX )
+
+### Method: yAxisSync( y, scaleY )
+
+### Method: resize( w, h )
+
+### Method: repaint()
+
+### Method: scaleAction(event)
+
+### Method: panAction(event)
