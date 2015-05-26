@@ -17,12 +17,6 @@ PIXI.utils._saidHello = true;
 Editor.registerWidget( 'pixi-grid', {
     is: 'pixi-grid',
 
-    behaviors: [EditorUI.focusable],
-
-    listeners: {
-        'mousedown': '_onMouseDown',
-    },
-
     properties: {
         debugInfo: {
             type: Object,
@@ -55,6 +49,10 @@ Editor.registerWidget( 'pixi-grid', {
         },
     },
 
+    hostAttributes: {
+        tabindex: -1
+    },
+
     created: function () {
         this.canvasWidth = 0;
         this.canvasHeight = 0;
@@ -80,8 +78,6 @@ Editor.registerWidget( 'pixi-grid', {
     },
 
     ready: function () {
-        this._initFocusable(this);
-
         var rect = this.$.view.getBoundingClientRect();
         this.renderer = new PIXI.WebGLRenderer( rect.width, rect.height, {
             view: this.$.canvas,
@@ -119,10 +115,6 @@ Editor.registerWidget( 'pixi-grid', {
     lightDomReady: function() {
         this.resize();
         this.repaint();
-    },
-
-    _onMouseDown: function ( event ) {
-        this.setFocus();
     },
 
     // default 0.5, 0.5
@@ -428,7 +420,7 @@ Editor.registerWidget( 'pixi-grid', {
     panAction: function ( event ) {
         if ( event.which === 1 ) {
             this.style.cursor = '-webkit-grabbing';
-            EditorUI.startDrag('-webkit-grab', event,
+            EditorUI.startDrag('-webkit-grabbing', event,
                                    // move
                                    function ( event, dx, dy, offsetx, offsety ) {
                                        this.pan( dx, dy );
