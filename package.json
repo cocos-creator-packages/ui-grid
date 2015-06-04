@@ -1,10 +1,10 @@
 {
   "name": "pixi-grid",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Pixi Grid Element",
   "author": "Firebox Technology",
   "hosts": {
-      "editor-framework": "^0.1.0"
+      "editor-framework": "^0.3.3"
   },
   "widgets": {
     "pixi-grid": "widget/pixi-grid.html"
