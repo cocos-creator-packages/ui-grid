@@ -80,7 +80,7 @@ Editor.registerWidget( 'pixi-grid', {
     ready: function () {
         var rect = this.$.view.getBoundingClientRect();
         this.renderer = new PIXI.WebGLRenderer( rect.width, rect.height, {
-            view: this.$.canvas,
+            view: this.$['pixi-grid-canvas'],
             transparent: true,
         });
 
