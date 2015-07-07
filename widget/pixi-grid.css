@@ -4,11 +4,12 @@
 }
 
 .labels {
-    color: #999;
-    font-size: 12px;
     position: absolute;
     z-index: 999;
+
     cursor: default;
+    color: #999;
+    font-size: 12px;
 }
 
 #hlabels {
@@ -37,6 +38,8 @@
 
 .debug-info {
     position: absolute;
+    z-index: 999;
+
     top: 10px;
     right: 10px;
     padding: 5px 15px;

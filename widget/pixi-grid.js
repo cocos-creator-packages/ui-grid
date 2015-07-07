@@ -1,3 +1,5 @@
+(function () {
+
 function _snapPixel (p) {
     return Math.floor(p);
 }
@@ -608,3 +610,5 @@ Editor.registerWidget( 'pixi-grid', {
         this.labels = this.labels.slice(0,this.labelIdx);
     },
 });
+
+})();
