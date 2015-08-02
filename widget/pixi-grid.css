@@ -21,8 +21,7 @@
 
 #hlabels .label {
     position: absolute;
-    /* transform: translateX(-50%); */
-    transform: translateX(5px);
+    /* transform: translateX(5px); */
 }
 
 #vlabels {
@@ -34,8 +33,7 @@
 
 #vlabels .label {
     position: absolute;
-    /* transform: translateY(-50%); */
-    transform: translateY(-100%) translateY(-2px);
+    /* transform: translateY(-100%) translateY(-2px); */
 }
 
 .debug-info {

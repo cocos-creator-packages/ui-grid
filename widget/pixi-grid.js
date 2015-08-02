@@ -60,9 +60,6 @@ Editor.registerWidget( 'pixi-grid', {
         this.canvasHeight = 0;
         this.worldPosition = [0, 0];
 
-        this.labels = [];
-        this.labelIdx = 0;
-
         this.hticks = null;
         this.xAxisScale = 1.0;
         this.xAxisOffset = 0.0;
@@ -84,6 +81,8 @@ Editor.registerWidget( 'pixi-grid', {
         this.renderer = new PIXI.WebGLRenderer( rect.width, rect.height, {
             view: this.$['pixi-grid-canvas'],
             transparent: true,
+            antialias: false,
+            forceFXAA: false,
         });
 
         this.stage = new PIXI.Container();
@@ -506,7 +505,7 @@ Editor.registerWidget( 'pixi-grid', {
             var minStep = 50, labelLevel, labelEL, tickValue;
             var decimals, fmt;
 
-            this._resetLabelPool();
+            this._resetLabels();
 
             // draw hlabel
             if ( this.showLabelH && this.hticks ) {
@@ -517,21 +516,28 @@ Editor.registerWidget( 'pixi-grid', {
                 decimals = Math.max( 0, -Math.floor(Math.log10(tickValue)) );
                 fmt = '0,' + Number(0).toFixed(decimals);
 
+                var hlabelsDOM = Polymer.dom(this.$.hlabels);
+
                 for ( j = 0; j < ticks.length; ++j ) {
-                    screen_x = this.valueToPixelH(ticks[j]);
-                    labelEL = this._requestLabel();
+                    screen_x = _snapPixel(this.valueToPixelH(ticks[j]));
+
+                    if ( j < hlabelsDOM.children.length ) {
+                        labelEL = hlabelsDOM.children[j];
+                    }
+                    else {
+                        labelEL = this._createLabel();
+                        hlabelsDOM.appendChild(labelEL);
+                    }
                     if ( this.hformat ) {
                         labelEL.innerText = this.hformat(ticks[j]);
                     }
                     else {
                         labelEL.innerText = numeral(ticks[j]).format(fmt);
                     }
-                    labelEL.style.left = _snapPixel(screen_x) + 'px';
-                    labelEL.style.bottom = '0px';
-                    labelEL.style.right = '';
-                    labelEL.style.top = '';
-                    Polymer.dom(this.$.hlabels).appendChild(labelEL);
+                    labelEL.style.display = 'block';
+                    labelEL.style.transform = 'translate3d(' + screen_x + 'px,' + '-15px,' + '0px)';
                 }
+                this._hlabelIdx = j;
             }
 
             // draw vlabel
@@ -543,25 +549,32 @@ Editor.registerWidget( 'pixi-grid', {
                 decimals = Math.max( 0, -Math.floor(Math.log10(tickValue)) );
                 fmt = '0,' + Number(0).toFixed(decimals);
 
+                var vlabelsDOM = Polymer.dom(this.$.vlabels);
+
                 for ( j = 0; j < ticks.length; ++j ) {
-                    screen_y = this.valueToPixelV(ticks[j]);
-                    labelEL = this._requestLabel();
+                    screen_y = _snapPixel(this.valueToPixelV(ticks[j])) - 15;
+
+                    if ( j < vlabelsDOM.children.length ) {
+                        labelEL = vlabelsDOM.children[j];
+                    }
+                    else {
+                        labelEL = this._createLabel();
+                        vlabelsDOM.appendChild(labelEL);
+                    }
                     if ( this.vformat ) {
                         labelEL.innerText = this.vformat(ticks[j]);
                     }
                     else {
                         labelEL.innerText = numeral(ticks[j]).format(fmt);
                     }
-                    labelEL.style.left = '0px';
-                    labelEL.style.top = _snapPixel(screen_y) + 'px';
-                    labelEL.style.bottom = '';
-                    labelEL.style.right = '';
-                    Polymer.dom(this.$.vlabels).appendChild(labelEL);
+                    labelEL.style.display = 'block';
+                    labelEL.style.transform = 'translate3d(0px,' + screen_y + 'px,' + '0px)';
                 }
+                this._vlabelIdx = j;
             }
 
             //
-            this._clearUnusedLabels();
+            this._hideUnusedLabels();
         }
 
         // DEBUG
@@ -581,31 +594,31 @@ Editor.registerWidget( 'pixi-grid', {
         }
     },
 
-    _resetLabelPool: function () {
-        this.labelIdx = 0;
+    _resetLabels: function () {
+        this._hlabelIdx = 0;
+        this._vlabelIdx = 0;
     },
 
-    _requestLabel: function () {
+    _createLabel: function () {
         var el;
-        if ( this.labelIdx < this.labels.length ) {
-            el = this.labels[this.labelIdx];
-            this.labelIdx += 1;
-            return el;
-        }
-
         el = document.createElement('div');
         el.classList.add('label');
-        this.labels.push(el);
-        this.labelIdx += 1;
         return el;
     },
 
-    _clearUnusedLabels: function () {
-        for ( var i = this.labelIdx; i < this.labels.length; ++i ) {
-            var el = this.labels[i];
-            Polymer.dom(Polymer.dom(el).parentNode).removeChild(el);
+    _hideUnusedLabels: function () {
+        var hlabelsDOM = Polymer.dom(this.$.hlabels);
+        var vlabelsDOM = Polymer.dom(this.$.vlabels);
+        var el, i;
+
+        for ( i = this._hlabelIdx; i < hlabelsDOM.children.length; ++i ) {
+            el = hlabelsDOM.children[i];
+            el.style.display = 'none';
         }
-        this.labels = this.labels.slice(0,this.labelIdx);
+        for ( i = this._vlabelIdx; i < vlabelsDOM.children.length; ++i ) {
+            el = vlabelsDOM.children[i];
+            el.style.display = 'none';
+        }
     },
 });
 
