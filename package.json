@@ -1,12 +1,31 @@
 {
-  "name": "pixi-grid",
+  "name": "ui-grid",
   "version": "0.1.0",
-  "description": "A Pixi Grid Element",
+  "description": "A Grid Widget",
   "author": "Firebox Technology",
+  "main": "main.js",
   "hosts": {
       "editor-framework": "^0.3.12"
   },
   "widgets": {
     "pixi-grid": "widget/pixi-grid.html"
+  },
+  "menus": {
+    "Developer/UI Preview/ui-grid": {
+      "message": "ui-grid:open"
+    }
+  },
+  "panels": {
+    "preview": {
+      "frame": "panel/preview.html",
+      "type": "dockable",
+      "title": "Grid",
+      "width": 800,
+      "height": 600,
+      "min-width": 400,
+      "min-height": 300,
+      "messages": [
+      ]
+    }
   }
 }

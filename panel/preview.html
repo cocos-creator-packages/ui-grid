@@ -1,0 +1,188 @@
+<link rel="import" href="packages://ui-grid/widget/pixi-grid.html">
+<link rel="import" href="packages://ui-gizmos/widget/svg-gizmos-view.html">
+
+<dom-module id="ui-grid-preview">
+    <style>
+        :host {
+            @apply(--layout-fit);
+            background: #333;
+        }
+    </style>
+
+    <template>
+        <!-- pixi grid -->
+        <pixi-grid id="grid" class="fit"
+            show-label-h
+            show-label-v
+            show-debug-info
+        >
+        </pixi-grid>
+
+        <!-- svg gizmos -->
+        <svg-gizmos-view id="gizmosView" class="fit"></svg-gizmos-view>
+    </template>
+</dom-module>
+
+<script>
+(function () {
+    // init gizmos
+    Editor.require('packages://ui-gizmos/init');
+
+    Editor.registerPanel( 'ui-grid.preview', {
+        is: 'ui-grid-preview',
+
+        listeners: {
+            'resize': '_onResize',
+            'mousedown': '_onMouseDown',
+            'mousewheel': '_onMouseWheel',
+            'keydown': '_onKeyDown',
+            'keyup': '_onKeyUp',
+        },
+
+        properties: {
+            scale: {
+                type: Number,
+                value: 1.0,
+            },
+        },
+
+        ready: function () {
+            // grid
+            this.$.grid.setScaleH( [5,2], 0.01, 1000 );
+            this.$.grid.setMappingH( 0, 1, 1 );
+
+            this.$.grid.setScaleV( [5,2], 0.01, 1000 );
+            this.$.grid.setMappingV( 0, 1, 1 );
+
+            this.$.grid.setAnchor( 0.5, 0.5 );
+
+            // make sure css reflow
+            requestAnimationFrame( function () {
+                // init grid
+                this.$.grid.resize();
+                this.$.grid.repaint();
+
+                // init gizmos
+                this.$.gizmosView.resize();
+            }.bind(this));
+        },
+
+        _onResize: function () {
+            // resize grid
+            this.$.grid.resize();
+            this.$.grid.repaint();
+
+            // resize gizmos
+            this.$.gizmosView.resize();
+        },
+
+        _onMouseWheel: function ( event ) {
+            event.stopPropagation();
+
+            var newScale = Editor.Utils.smoothScale(this.scale, event.wheelDelta);
+            newScale = Math.clamp(newScale,
+                                  this.$.grid.hticks.minValueScale,
+            this.$.grid.hticks.maxValueScale);
+
+            //
+            this.scale = newScale;
+
+            //
+            this.$.grid.xAxisScaleAt ( event.offsetX, newScale );
+            this.$.grid.yAxisScaleAt ( event.offsetY, newScale );
+            this.$.grid.repaint();
+
+            //
+            this.$.gizmosView.scale = newScale;
+        },
+
+        _onMouseDown: function ( event ) {
+            event.stopPropagation();
+
+            // panning
+            if ( (event.which === 1 && event.shiftKey) ||
+                 event.which === 2
+               )
+            {
+                this.style.cursor = '-webkit-grabbing';
+                EditorUI.startDrag(
+                    '-webkit-grabbing',
+                    event,
+
+                    // move
+                    function ( event, dx, dy, offsetx, offsety ) {
+                        this.$.grid.pan( dx, dy );
+                        this.$.grid.repaint();
+                    }.bind(this),
+
+                    // end
+                    function ( event, dx, dy, offsetx, offsety ) {
+                        if ( event.shiftKey )
+                            this.style.cursor = '-webkit-grab';
+                        else
+                            this.style.cursor = '';
+                    }.bind(this)
+                );
+
+                return;
+            }
+
+            // process rect-selection
+            if ( event.which === 1 ) {
+                var startx = event.offsetX;
+                var starty = event.offsetY;
+
+                EditorUI.startDrag(
+                    'default',
+                    event,
+
+                    // move
+                    function ( event, dx, dy, offsetx, offsety ) {
+                        var magSqr = offsetx*offsetx + offsety*offsety;
+                        if ( magSqr < 2.0 * 2.0 ) {
+                            return;
+                        }
+
+                        var x = startx;
+                        var y = starty;
+
+                        if ( offsetx < 0.0 ) {
+                            x += offsetx;
+                            offsetx = -offsetx;
+                        }
+                        if ( offsety < 0.0 ) {
+                            y += offsety;
+                            offsety = -offsety;
+                        }
+
+                        this.$.gizmosView.updateSelectRect( x, y, offsetx, offsety );
+                    }.bind(this),
+
+                    // end
+                    function ( event, dx, dy, offsetx, offsety ) {
+                        this.$.gizmosView.fadeoutSelectRect();
+                    }.bind(this)
+                );
+
+                return;
+            }
+        },
+
+        _onKeyDown: function ( event ) {
+            event.stopPropagation();
+
+            if ( Editor.KeyCode(event.which) === 'shift' ) {
+                this.style.cursor = '-webkit-grab';
+            }
+        },
+
+        _onKeyUp: function ( event ) {
+            event.stopPropagation();
+
+            if ( Editor.KeyCode(event.which) === 'shift' ) {
+                this.style.cursor = '';
+            }
+        },
+    });
+})();
+</script>

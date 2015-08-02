@@ -364,13 +364,7 @@ Editor.registerWidget( 'pixi-grid', {
             return;
 
         this._updateGrids();
-
-        if ( !this._requestID ) {
-            this._requestID = requestAnimationFrame( function () {
-                this._requestID = null;
-                this.renderer.render(this.stage);
-            }.bind(this));
-        }
+        this.renderer.render(this.stage);
     },
 
     scaleAction: function ( event ) {
