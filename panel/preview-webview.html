@@ -1,0 +1,39 @@
+<dom-module id="ui-grid-preview">
+    <style>
+        :host {
+            @apply(--layout-vertical);
+
+            overflow: auto;
+        }
+
+        .wrapper {
+            position: relative;
+        }
+
+        .border {
+            border: 1px solid #171717;
+            background: #333;
+        }
+    </style>
+
+    <template>
+        <div class="wrapper flex-1">
+            <div class="border fit">
+                <webview id="view" src="webview-index.html"
+                    nodeintegration
+                    disablewebsecurity
+                    autosize="on"
+                ></webview>
+            </div>
+        </div>
+    </template>
+</dom-module>
+
+<script>
+(function () {
+    Editor.registerPanel( 'ui-grid.preview-webview', {
+        is: 'ui-grid-preview',
+    });
+
+})();
+</script>
