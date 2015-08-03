@@ -519,7 +519,7 @@ Editor.registerWidget( 'pixi-grid', {
                 var hlabelsDOM = Polymer.dom(this.$.hlabels);
 
                 for ( j = 0; j < ticks.length; ++j ) {
-                    screen_x = _snapPixel(this.valueToPixelH(ticks[j]));
+                    screen_x = _snapPixel(this.valueToPixelH(ticks[j])) + 5;
 
                     if ( j < hlabelsDOM.children.length ) {
                         labelEL = hlabelsDOM.children[j];
@@ -535,7 +535,11 @@ Editor.registerWidget( 'pixi-grid', {
                         labelEL.innerText = numeral(ticks[j]).format(fmt);
                     }
                     labelEL.style.display = 'block';
-                    labelEL.style.transform = 'translate3d(' + screen_x + 'px,' + '-15px,' + '0px)';
+                    labelEL.style.left = _snapPixel(screen_x) + 'px';
+                    labelEL.style.bottom = '0px';
+                    labelEL.style.right = '';
+                    labelEL.style.top = '';
+                    // labelEL.style.transform = 'translate3d(' + screen_x + 'px,' + '-15px,' + '0px)';
                 }
                 this._hlabelIdx = j;
             }
@@ -568,7 +572,11 @@ Editor.registerWidget( 'pixi-grid', {
                         labelEL.innerText = numeral(ticks[j]).format(fmt);
                     }
                     labelEL.style.display = 'block';
-                    labelEL.style.transform = 'translate3d(0px,' + screen_y + 'px,' + '0px)';
+                    labelEL.style.left = '0px';
+                    labelEL.style.top = _snapPixel(screen_y) + 'px';
+                    labelEL.style.bottom = '';
+                    labelEL.style.right = '';
+                    // labelEL.style.transform = 'translate3d(0px,' + screen_y + 'px,' + '0px)';
                 }
                 this._vlabelIdx = j;
             }

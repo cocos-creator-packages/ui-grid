@@ -3,6 +3,10 @@
     position: relative;
 }
 
+#pixi-grid-canvas {
+    position: absolute;
+}
+
 .labels {
     position: absolute;
     z-index: 999;
