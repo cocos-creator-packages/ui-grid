@@ -1,5 +1,4 @@
 <link rel="import" href="packages://ui-grid/widget/pixi-grid.html">
-<link rel="import" href="packages://ui-gizmos/widget/svg-gizmos-view.html">
 
 <dom-module id="ui-grid-preview">
     <style>
@@ -17,17 +16,11 @@
             show-debug-info
         >
         </pixi-grid>
-
-        <!-- svg gizmos -->
-        <svg-gizmos-view id="gizmosView" class="fit"></svg-gizmos-view>
     </template>
 </dom-module>
 
 <script>
 (function () {
-    // init gizmos
-    Editor.require('packages://ui-gizmos/init');
-
     Editor.registerPanel( 'ui-grid.preview', {
         is: 'ui-grid-preview',
 
@@ -61,9 +54,6 @@
                 // init grid
                 this.$.grid.resize();
                 this.$.grid.repaint();
-
-                // init gizmos
-                this.$.gizmosView.resize();
             }.bind(this));
         },
 
@@ -71,9 +61,6 @@
             // resize grid
             this.$.grid.resize();
             this.$.grid.repaint();
-
-            // resize gizmos
-            this.$.gizmosView.resize();
         },
 
         _onMouseWheel: function ( event ) {
@@ -91,9 +78,6 @@
             this.$.grid.xAxisScaleAt ( event.offsetX, newScale );
             this.$.grid.yAxisScaleAt ( event.offsetY, newScale );
             this.$.grid.repaint();
-
-            //
-            this.$.gizmosView.scale = newScale;
         },
 
         _onMouseDown: function ( event ) {
@@ -154,13 +138,10 @@
                             y += offsety;
                             offsety = -offsety;
                         }
-
-                        this.$.gizmosView.updateSelectRect( x, y, offsetx, offsety );
                     }.bind(this),
 
                     // end
                     function ( event, dx, dy, offsetx, offsety ) {
-                        this.$.gizmosView.fadeoutSelectRect();
                     }.bind(this)
                 );
 
