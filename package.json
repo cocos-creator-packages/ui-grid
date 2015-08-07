@@ -5,7 +5,7 @@
   "author": "Firebox Technology",
   "main": "main.js",
   "hosts": {
-      "editor-framework": "^0.3.12"
+    "editor-framework": "^0.3.14"
   },
   "widgets": {
     "pixi-grid": "widget/pixi-grid.html"
@@ -27,8 +27,7 @@
       "height": 600,
       "min-width": 400,
       "min-height": 300,
-      "messages": [
-      ]
+      "messages": []
     },
     "preview-webview": {
       "frame": "panel/preview-webview.html",
@@ -38,8 +37,7 @@
       "height": 600,
       "min-width": 400,
       "min-height": 300,
-      "messages": [
-      ]
+      "messages": []
     }
   }
 }
