@@ -153,6 +153,7 @@ Editor.registerWidget( 'pixi-grid', {
 
     setMappingH: function ( minValue, maxValue, pixelRange ) {
         this._xAnchorOffset = minValue / (maxValue - minValue);
+        this.xDirection = (maxValue - minValue) > 0 ? 1 : -1;
 
         this.pixelToValueH = function (x) {
             var pixelOffset = this.xAxisOffset;
@@ -206,6 +207,7 @@ Editor.registerWidget( 'pixi-grid', {
 
     setMappingV: function ( minValue, maxValue, pixelRange ) {
         this._yAnchorOffset = minValue / (maxValue - minValue);
+        this.yDirection = (maxValue - minValue) > 0 ? 1 : -1;
 
         this.pixelToValueV = function (y) {
             var pixelOffset = this.yAxisOffset;
