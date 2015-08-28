@@ -21,7 +21,11 @@
     </template>
 </dom-module>
 
-<script type="text/javascript" src="app://bower_components/pixi/bin/pixi.min.js"></script>
+<script type="text/javascript">
+    if (typeof PIXI === 'undefined') {
+        Editor.require('app://bower_components/pixi/bin/pixi.min.js');
+    }
+</script>
 <script type="text/javascript" src="app://bower_components/numeral/min/numeral.min.js"></script>
 <script type="text/javascript" src="linear-ticks.js"></script>
 <script type="text/javascript" src="pixi-grid.js"></script>
