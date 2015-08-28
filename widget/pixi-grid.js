@@ -74,6 +74,9 @@ Editor.registerWidget( 'pixi-grid', {
         this._xAnchorOffset = 0.0;
         this._yAnchorOffset = 0.0;
 
+        // init direction
+        this.xDirection = 1.0;
+        this.yDirection = 1.0;
     },
 
     ready: function () {
