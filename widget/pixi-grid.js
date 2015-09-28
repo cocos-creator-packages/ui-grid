@@ -16,9 +16,7 @@ function _interpolate(a, b) {
 // pixi config
 PIXI.utils._saidHello = true;
 
-Editor.registerWidget( 'pixi-grid', {
-    is: 'pixi-grid',
-
+Editor.registerElement({
     properties: {
         debugInfo: {
             type: Object,
