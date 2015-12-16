@@ -11,11 +11,13 @@
     "pixi-grid": "widget/pixi-grid.html"
   },
   "menus": {
-    "Developer/UI Preview/ui-grid": {
-      "message": "ui-grid:open"
+    "i18n:MAIN_MENU.developer.title/UI Preview/ui-grid": {
+      "message": "ui-grid:open",
+      "dev": true
     },
-    "Developer/UI Preview/ui-grid-webview": {
-      "message": "ui-grid:open-webview"
+    "i18n:MAIN_MENU.developer.title/UI Preview/ui-grid-webview": {
+      "message": "ui-grid:open-webview",
+      "dev": true
     }
   },
   "panels": {
