@@ -126,8 +126,8 @@
 
     // default 0.5, 0.5
     setAnchor ( x, y ) {
-      this.xAnchor = Math.clamp( x, -1, 1 );
-      this.yAnchor = Math.clamp( y, -1, 1 );
+      this.xAnchor = Editor.Math.clamp( x, -1, 1 );
+      this.yAnchor = Editor.Math.clamp( y, -1, 1 );
     },
 
     // recommended: [5,2], 0.001, 1000
@@ -136,7 +136,7 @@
         .initTicks( lods, minScale, maxScale )
         .spacing ( 10, 80 )
         ;
-      this.xAxisScale = Math.clamp(
+      this.xAxisScale = Editor.Math.clamp(
         this.xAxisScale,
         this.hticks.minValueScale,
         this.hticks.maxValueScale
@@ -192,7 +192,7 @@
       .initTicks( lods, minScale, maxScale )
       .spacing ( 10, 80 )
       ;
-      this.yAxisScale = Math.clamp(
+      this.yAxisScale = Editor.Math.clamp(
         this.yAxisScale,
         this.vticks.minValueScale,
         this.vticks.maxValueScale
@@ -268,7 +268,7 @@
       this.xAxisOffset = newOffset;
 
       if ( min !== undefined && max !== undefined ) {
-        this.xAxisOffset = Math.clamp( this.xAxisOffset, -max, -min );
+        this.xAxisOffset = Editor.Math.clamp( this.xAxisOffset, -max, -min );
         return;
       }
 
@@ -303,7 +303,7 @@
       this.yAxisOffset = newOffset;
 
       if ( min !== undefined && max !== undefined ) {
-        this.yAxisOffset = Math.clamp( this.yAxisOffset, -max, -min );
+        this.yAxisOffset = Editor.Math.clamp( this.yAxisOffset, -max, -min );
         return;
       }
 
@@ -320,14 +320,14 @@
 
     xAxisScaleAt ( pixelX, scale ) {
       let oldValueX = this.pixelToValueH(pixelX);
-      this.xAxisScale = Math.clamp( scale, this.hticks.minValueScale, this.hticks.maxValueScale );
+      this.xAxisScale = Editor.Math.clamp( scale, this.hticks.minValueScale, this.hticks.maxValueScale );
       let newScreenX = this.valueToPixelH(oldValueX);
       this.pan( pixelX - newScreenX, 0 );
     },
 
     yAxisScaleAt ( pixelY, scale ) {
       let oldValueY = this.pixelToValueV(pixelY);
-      this.yAxisScale = Math.clamp( scale, this.vticks.minValueScale, this.vticks.maxValueScale );
+      this.yAxisScale = Editor.Math.clamp( scale, this.vticks.minValueScale, this.vticks.maxValueScale );
       let newScreenY = this.valueToPixelV(oldValueY);
       this.pan( 0, pixelY - newScreenY );
     },
@@ -424,7 +424,7 @@
       //     cancelAnimationFrame(requestId);
       //   }
       //   else {
-      //     this.xAxisScale = Math.lerp( curScale, nextScale, ratio );
+      //     this.xAxisScale = Editor.Math.lerp( curScale, nextScale, ratio );
       //   }
       //   this.repaint();
       // };

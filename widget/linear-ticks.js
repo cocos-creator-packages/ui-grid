@@ -106,7 +106,7 @@ class LinearTicks {
     }
 
     for ( let j = this.minTickLevel; j <= this.maxTickLevel; ++j ) {
-      this.tickRatios[j] = Math.clamp01(this.tickRatios[j]);
+      this.tickRatios[j] = Editor.Math.clamp01(this.tickRatios[j]);
     }
 
     return this;
