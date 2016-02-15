@@ -10,7 +10,7 @@
   "widgets": {
     "pixi-grid": "widget/pixi-grid.html"
   },
-  "menus": {
+  "main-menu": {
     "i18n:MAIN_MENU.developer.title/UI Preview/ui-grid": {
       "message": "ui-grid:open",
       "dev": true
