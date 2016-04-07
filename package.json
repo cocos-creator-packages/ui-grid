@@ -5,7 +5,7 @@
   "author": "Firebox Technology",
   "main": "main.js",
   "hosts": {
-    "editor-framework": "^0.4.0"
+    "editor-framework": "^0.5.0"
   },
   "widgets": {
     "pixi-grid": "widget/pixi-grid.html"
