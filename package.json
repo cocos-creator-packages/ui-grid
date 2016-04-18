@@ -20,26 +20,26 @@
       "dev": true
     }
   },
-  "panels": {
-    "preview": {
-      "frame": "panel/preview.html",
-      "type": "dockable",
-      "title": "Grid",
-      "width": 800,
-      "height": 600,
-      "min-width": 400,
-      "min-height": 300,
-      "messages": []
-    },
-    "preview-webview": {
-      "frame": "panel/preview-webview.html",
-      "type": "dockable",
-      "title": "Grid WebView",
-      "width": 800,
-      "height": 600,
-      "min-width": 400,
-      "min-height": 300,
-      "messages": []
-    }
+  "panel.preview": {
+    "main": "panel/preview.html",
+    "ui": "polymer",
+    "type": "dockable",
+    "title": "Grid",
+    "width": 800,
+    "height": 600,
+    "min-width": 400,
+    "min-height": 300,
+    "messages": []
+  },
+  "panel.preview-webview": {
+    "main": "panel/preview-webview.html",
+    "ui": "polymer",
+    "type": "dockable",
+    "title": "Grid WebView",
+    "width": 800,
+    "height": 600,
+    "min-width": 400,
+    "min-height": 300,
+    "messages": []
   }
 }

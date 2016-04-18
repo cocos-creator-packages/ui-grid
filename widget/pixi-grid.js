@@ -21,7 +21,7 @@
   // pixi config
   PIXI.utils._saidHello = true;
 
-  Editor.registerElement({
+  Editor.polymerElement({
     properties: {
       debugInfo: {
         type: Object,
