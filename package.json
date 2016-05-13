@@ -4,9 +4,6 @@
   "description": "A Grid Widget",
   "author": "Firebox Technology",
   "main": "main.js",
-  "hosts": {
-    "editor-framework": "^0.5.0"
-  },
   "widgets": {
     "pixi-grid": "widget/pixi-grid.html"
   },
