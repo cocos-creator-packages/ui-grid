@@ -436,7 +436,7 @@
     panAction ( event ) {
       if ( event.which === 1 ) {
         this.style.cursor = '-webkit-grabbing';
-        Editor.UI.DomUtils.startDrag (
+        Editor.UI.startDrag (
           '-webkit-grabbing',
           event,
 
