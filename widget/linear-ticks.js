@@ -42,35 +42,48 @@ class LinearTicks {
     let curTick = 1.0;
     let curIdx = 0;
 
-    this.ticks.push(curTick);
-
     let minScale = min;
     let maxScale = max;
     let maxTickValue = 1;
     let minTickValue = 1;
 
+    // NOTE: 'true' to add all the ticks way back to the value 1
+    let forceTicks = false;
+
+    if ( forceTicks ||
+        (minScale <= curTick && curTick <= maxScale) ) {
+      this.ticks.push(curTick);
+    }
+
     while ( curTick * this.tickLods[curIdx] <= maxScale ) {
       curTick = curTick *  this.tickLods[curIdx];
       curIdx = curIdx + 1 > this.tickLods.length-1 ? 0 : curIdx + 1;
-      this.ticks.push(curTick);
 
-      maxTickValue = curTick;
+      if ( forceTicks || minScale <= curTick ) {
+        this.ticks.push(curTick);
+      }
     }
-
-    // NOTE: we need to leave two more level for both zoom-in, so enlarge 100 times here.
-    this.minValueScale = 1.0/maxTickValue * 100;
 
     curIdx = this.tickLods.length-1;
     curTick = 1.0;
     while ( curTick / this.tickLods[curIdx] >= minScale ) {
       curTick = curTick / this.tickLods[curIdx];
       curIdx = curIdx - 1 < 0 ? this.tickLods.length-1 : curIdx - 1;
-      this.ticks.unshift(curTick);
 
-      minTickValue = curTick;
+      if ( forceTicks || curTick <= maxScale ) {
+        this.ticks.unshift(curTick);
+      }
     }
 
-    // NOTE: we need to leave two more level for both zoom-out, so enlarge 100 times here.
+    if ( !forceTicks && this.ticks.length === 0 ) {
+      this.ticks.push(1);
+    }
+
+    maxTickValue = this.ticks[this.ticks.length - 1];
+    minTickValue = this.ticks[0];
+
+    // NOTE: we need to leave two more level for both zoom-in and zoom-out, so enlarge 100 times here.
+    this.minValueScale = 1.0/maxTickValue * 100;
     this.maxValueScale = 1.0/minTickValue * 100;
 
     return this;
